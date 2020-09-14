@@ -1,0 +1,14 @@
+FROM centos
+LABEL MACHINE_ROLE=managed-host
+MAINTAINER SHUBHAM RAIKWAR <github.com/raikwar141>
+# package manager yum
+RUN yum install epel-release -y
+RUN yum install sudo openssh-server -y
+# echo username:passward | chpasswd
+RUN ssh-keygen -A
+EXPOSE 22
+RUN useradd devops
+RUN echo devops:password | chpasswd
+RUN echo "devops ALL=(ALL) ALL" > /etc/sudoers.d/devops
+CMD ["/usr/sbin/sshd","-D"]
+RUN rm -f /var/run/nologin
